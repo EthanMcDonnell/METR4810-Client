@@ -30,7 +30,8 @@ with open(os.path.join("ps4_keys.json"), 'r+') as file:
 # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
 analog_keys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1 }
 
-MODEL_NBR_UUID = '0000abf0-0000-1000-8000-00805f9b34fb'
+UUID = "0000abf1-0000-1000-8000-00805f9b34fb"
+
 address = "0DEF6B3D-07EF-0305-9454-93D83ADF3CE2"
 async def read_all_bt():
     devices = await BleakScanner.discover()
@@ -44,17 +45,17 @@ async def read_all_bt():
             
 async def print_mode_num():
     async with BleakClient(address) as client:
-        #model_number = await client.read_gatt_char(MODEL_NBR_UUID)
-        #print("Model Number: {0}".format("".join(map(chr, model_number))))
-        pass
+        is_connected = await client.is_connected()
+        print(f"Connected: {is_connected}")
+        print("------------------------------------")
+        await client.write_gatt_char(UUID, b"Ethan Is Cool", response=False)
+        await client.read_gatt_char(UUID)
+        print("------------------------------------")
 
 
 asyncio.run(read_all_bt())
-asyncio.run(print_mode_num())
-async def send_data():
-    async with BleakClient(address) as client:
-
-        BleakClient.write_gatt_char()
+for i in range(10):
+    asyncio.run(print_mode_num())
 
 # START OF GAME LOOP
 while not running:
