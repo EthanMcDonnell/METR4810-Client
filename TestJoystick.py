@@ -1,7 +1,7 @@
 
 # Retrieved from: https://github.com/ChristianD37/YoutubeTutorials/tree/master/PS4%20Controller
-
-
+import asyncio
+from bleak import BleakScanner, BleakClient
 import pygame
 import json, os
 
@@ -30,9 +30,36 @@ with open(os.path.join("ps4_keys.json"), 'r+') as file:
 # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
 analog_keys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1 }
 
+MODEL_NBR_UUID = '0000abf0-0000-1000-8000-00805f9b34fb'
+address = "0DEF6B3D-07EF-0305-9454-93D83ADF3CE2"
+async def read_all_bt():
+    devices = await BleakScanner.discover()
+    #BleakClient.connect()
+    for d in devices:
+        if d.name == "METR4810_Team8":
+            print(d)
+            print(d.details)
+            print(d.address)
+            print(d.metadata)
+            
+async def print_mode_num():
+    async with BleakClient(address) as client:
+        #model_number = await client.read_gatt_char(MODEL_NBR_UUID)
+        #print("Model Number: {0}".format("".join(map(chr, model_number))))
+        pass
+
+
+asyncio.run(read_all_bt())
+asyncio.run(print_mode_num())
+async def send_data():
+    async with BleakClient(address) as client:
+
+        BleakClient.write_gatt_char()
+
 # START OF GAME LOOP
-while running:
+while not running:
     ################################# CHECK PLAYER INPUT #################################
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -64,7 +91,7 @@ while running:
         #HANDLES ANALOG INPUTS
         if event.type == pygame.JOYAXISMOTION:
             analog_keys[event.axis] = event.value
-            # print(analog_keys)
+            print(analog_keys)
             # Horizontal Analog
             if abs(analog_keys[0]) > .4:
                 if analog_keys[0] < -.7:
