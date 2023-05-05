@@ -34,19 +34,20 @@ class Game:
             self.joysticks.append(pygame.joystick.Joystick(i))
         for joystick in self.joysticks:
             joystick.init()
+        print(self.joysticks)
 
         with open(os.path.join("ps4_keys.json"), 'r+') as file:
             self.button_keys = json.load(file)
         # 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
         # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
         self.analog_keys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1 }
+        self.encodable_analog_values = "Null"
         self.LEFT, self.RIGHT, self.UP, self.DOWN = False, False, False, False
 
     def run_game(self):
         ################################# CHECK PLAYER INPUT #################################
         
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.KEYDOWN:
@@ -78,6 +79,7 @@ class Game:
             if event.type == pygame.JOYAXISMOTION:
 
                 self.analog_keys[event.axis] = event.value
+                self.encodable_analog_values = str(list(self.analog_keys.values()))[1:-1].replace(" ","")
                 print(self.analog_keys)
                 # Horizontal Analog
                 if abs(self.analog_keys[0]) > .4:
@@ -119,8 +121,6 @@ class Game:
             self.color = 0
         elif self.color > 255:
             self.color = 255
-
-
 
         ################################# UPDATE WINDOW AND DISPLAY #################################
         self.canvas.fill((255,255,255))
