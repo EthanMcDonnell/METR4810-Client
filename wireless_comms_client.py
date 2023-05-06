@@ -1,4 +1,4 @@
-import asyncio
+
 from bleak import BleakScanner, BleakClient
 from controller import Game
 
@@ -17,21 +17,12 @@ class Client:
                 print(d.details)
                 print(d.address)
             
-    async def write_to_server(self):
+    async def write_to_server(self, gameInstance:Game):
         async with BleakClient(self.address) as client:
-            g = Game()
-            while(g.running):
-                g.run_game()
-                await client.write_gatt_char(self.UUID,g.encodable_analog_values.encode(), response=False) # Remove brackets on end, whitespace and send as bytes
-                await client.read_gatt_char(self.UUID) #Need to read as well for some reason
-
-def main():
-    c = Client()
-    #asyncio.run(c.read_all_bt())
-    asyncio.run(c.write_to_server())
-    # g = Game()
-    # while(g.running):
-    #     g.run_game()
-
-if __name__ == "__main__":
-      main()
+            while(gameInstance.running):
+                # needs to be run here (within "BleakClient as client")
+                gameInstance.run_game() 
+                # Remove brackets on end, whitespace and send to server as bytes
+                await client.write_gatt_char(self.UUID, gameInstance.encodable_analog_values.encode(), response=False) 
+                # Need to read as well for some reason ¯\_(ツ)_/¯, Gatt event on client side not event 2 unless it is called
+                await client.read_gatt_char(self.UUID) 

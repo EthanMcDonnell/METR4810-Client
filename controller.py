@@ -1,6 +1,5 @@
 
 # Retrieved from: https://github.com/ChristianD37/YoutubeTutorials/tree/master/PS4%20Controller
-import asyncio
 import pygame
 import json, os
 
@@ -9,12 +8,6 @@ import json, os
 
 ###########################################################################################
 
-
-
-class Controller:
-
-    def __init__(self):
-        pass
 
 class Game:
     
