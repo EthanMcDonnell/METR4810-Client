@@ -22,7 +22,9 @@ class Client:
             while(gameInstance.running):
                 # needs to be run here (within "BleakClient as client")
                 gameInstance.run_game() 
-                # Remove brackets on end, whitespace and send to server as bytes
-                await client.write_gatt_char(self.UUID, gameInstance.encodable_analog_values.encode(), response=False) 
-                # Need to read as well for some reason ¯\_(ツ)_/¯, Gatt event on client side not event 2 unless it is called
-                await client.read_gatt_char(self.UUID) 
+                if (gameInstance.analogValuesAssigned):
+                    print(gameInstance.encodable_analog_values)
+                    # Remove brackets on end, whitespace and send to server as bytes
+                    await client.write_gatt_char(self.UUID, gameInstance.encodable_analog_values.encode(), response=False) 
+                    # Need to read as well for some reason ¯\_(ツ)_/¯, Gatt event on client side not event 2 unless it is called
+                    await client.read_gatt_char(self.UUID) 

@@ -18,7 +18,7 @@ class Game:
         self.window = pygame.display.set_mode(((DISPLAY_W,DISPLAY_H)))
         self.running = True
         self.player = pygame.Rect(DISPLAY_W/2, DISPLAY_H/2, 60,60)
-        
+        self.analogValuesAssigned = False
         self.clock = pygame.time.Clock()
         self.color = 0
         ###########################################################################################
@@ -72,8 +72,8 @@ class Game:
             if event.type == pygame.JOYAXISMOTION:
 
                 self.analog_keys[event.axis] = event.value
+                self.analogValuesAssigned = True
                 self.encodable_analog_values = str(list(self.analog_keys.values()))[1:-1].replace(" ","")
-                print(self.analog_keys)
                 # Horizontal Analog
                 if abs(self.analog_keys[0]) > .4:
                     if self.analog_keys[0] < -.7:
