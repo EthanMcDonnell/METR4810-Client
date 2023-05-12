@@ -4,7 +4,7 @@ from wireless_comms_client import Client
 import asyncio
 
 def main():
-    runGameWithoutClient = False # set to true for testing game
+    runGameWithoutClient = True # set to true for testing game
     c = Client()
     g = Game()
     if runGameWithoutClient:
