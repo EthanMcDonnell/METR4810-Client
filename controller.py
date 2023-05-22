@@ -17,7 +17,6 @@ class Game:
         self.player = pygame.Rect(DISPLAY_W/2, DISPLAY_H/2, 60,60)
         self.analogValuesAssigned = False
         self.clock = pygame.time.Clock()
-        self.color = 0
         self.joysticks = []
         for i in range(pygame.joystick.get_count()):
             self.joysticks.append(pygame.joystick.Joystick(i))
@@ -48,11 +47,6 @@ class Game:
             if event.type == pygame.JOYAXISMOTION:
                 self.analog_keys[event.axis] = event.value
                 self.analogValuesAssigned = True
+                print(self.encodable_analog_values)
                 self.encodable_analog_values = str(list(self.analog_keys.values()))[1:-1].replace(" ","")
                     
-        # Update windown and display
-        self.canvas.fill((255,255,255))
-        pygame.draw.rect(self.canvas, (0,0 + self.color,255), self.player)
-        self.window.blit(self.canvas, (0,0))
-        self.clock.tick(60)
-        pygame.display.update()
